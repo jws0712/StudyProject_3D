@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-
     public float speed = 5;
     Vector3 dir;
-
+    public GameObject explosionFactory;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +36,10 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        GameObject explosion = Instantiate(explosionFactory);
+
+        explosion.transform.position = transform.position;
+
         Destroy(collision.gameObject);
         Destroy(gameObject);
     }
