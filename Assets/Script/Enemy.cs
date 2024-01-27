@@ -42,5 +42,11 @@ public class Enemy : MonoBehaviour
 
         Destroy(collision.gameObject);
         Destroy(gameObject);
+
+        GameObject smObject = GameObject.Find("ScoreManager");
+
+        ScoreManager sm = smObject.GetComponent<ScoreManager>();
+
+        sm.SetScore(sm.GetSocre() + 1);
     }
 }
