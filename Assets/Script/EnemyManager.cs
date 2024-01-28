@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    public int pollSize = 10;
+
+    GameObject[] enemyObjectPool;
+
+    public Transform[] spawnPoints;
+
     float minTime = 1;
 
     float maxTime = 5;

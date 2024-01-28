@@ -11,7 +11,17 @@ public class ScoreManager : MonoBehaviour
     public Text BestScoreUI;
 
     private int BestSocre;
-    // Start is called before the first frame update
+
+    public static ScoreManager Instance = null;
+
+    void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }    
+    }
+
     void Start()
     {
         BestSocre = PlayerPrefs.GetInt("Best Score", 0);
@@ -19,30 +29,27 @@ public class ScoreManager : MonoBehaviour
         BestScoreUI.text = "최고 점수: " + BestSocre;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public int Score
     {
-        
-    }
-
-    public void SetScore(int value)
-    {
-        currentSocre = value;
-
-        currentSocreUI.text = "현재 점수: " + currentSocre;
-
-        if (currentSocre > BestSocre)
+        get
         {
-            BestSocre = currentSocre;
-
-            BestScoreUI.text = "최고 점수: " + BestSocre;
-
-            PlayerPrefs.SetInt("Best Score", BestSocre);
+            return currentSocre;
         }
-    }
+        set
+        {
+            currentSocre = value;
 
-    public int GetSocre()
-    {
-        return currentSocre;
+            currentSocreUI.text = "현재 점수: " + currentSocre;
+
+            if (currentSocre > BestSocre)
+            {
+                BestSocre = currentSocre;
+
+                BestScoreUI.text = "최고 점수: " + BestSocre;
+
+                PlayerPrefs.SetInt("Best Score", BestSocre);
+            }
+        }
     }
 }

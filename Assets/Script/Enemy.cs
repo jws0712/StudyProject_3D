@@ -36,17 +36,21 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        ScoreManager.Instance.Score++;
+
         GameObject explosion = Instantiate(explosionFactory);
 
         explosion.transform.position = transform.position;
 
-        Destroy(collision.gameObject);
+        if (collision.gameObject.name.Contains("Bullet"))
+        {
+            collision.gameObject.SetActive(false);
+        }
+        else
+        {
+            Destroy(collision.gameObject);
+        }
+        
         Destroy(gameObject);
-
-        GameObject smObject = GameObject.Find("ScoreManager");
-
-        ScoreManager sm = smObject.GetComponent<ScoreManager>();
-
-        sm.SetScore(sm.GetSocre() + 1);
     }
 }

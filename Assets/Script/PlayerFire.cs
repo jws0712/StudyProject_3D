@@ -6,13 +6,26 @@ public class PlayerFire : MonoBehaviour
 {
     public GameObject bulletFactory;
 
+    public int poolSize = 10;
+
+    GameObject[] bulletObjectPool; 
+
     public GameObject firePosition;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        bulletObjectPool = new GameObject[poolSize];
+
+        for(int i = 0; i < poolSize; i++)
+        {
+            GameObject bullet = Instantiate(bulletFactory);
+
+            bulletObjectPool[i] = bullet;
+
+            bullet.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -20,9 +33,20 @@ public class PlayerFire : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            GameObject bullet = Instantiate(bulletFactory);
+            for(int i = 0; i < poolSize; i++)
+            {
+                GameObject bullet = bulletObjectPool[i];
+                if(bullet.activeSelf == false)
+                {
+                    bullet.SetActive(true);
 
-            bullet.transform.position = firePosition.transform.position;
+                    bullet.transform.position = transform.position;
+
+                    break;
+                }
+            }
+
+            
         }
     }
 }
