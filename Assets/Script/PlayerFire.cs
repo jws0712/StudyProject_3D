@@ -8,7 +8,7 @@ public class PlayerFire : MonoBehaviour
 
     public int poolSize = 10;
 
-    GameObject[] bulletObjectPool; 
+    public List<GameObject> bulletObjectPool; 
 
     public GameObject firePosition;
 
@@ -16,37 +16,48 @@ public class PlayerFire : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bulletObjectPool = new GameObject[poolSize];
+        bulletObjectPool = new List<GameObject>();
 
         for(int i = 0; i < poolSize; i++)
         {
             GameObject bullet = Instantiate(bulletFactory);
 
-            bulletObjectPool[i] = bullet;
+            bulletObjectPool.Add(bullet);
 
             bullet.SetActive(false);
         }
+
+        #if UNITY_ANDROID
+                GameObject.Find("Joystick canvas XYBZ").SetActive(true);
+        #elif UNITY_EDITOR
+                GameObject.Find("Joystick canvas XYBZ").SetActive(false);
+        #endif
     }
 
     // Update is called once per frame
     void Update()
     {
+#if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetButtonDown("Fire1"))
         {
-            for(int i = 0; i < poolSize; i++)
-            {
-                GameObject bullet = bulletObjectPool[i];
-                if(bullet.activeSelf == false)
-                {
-                    bullet.SetActive(true);
+            Fire();
+        }
+#endif
 
-                    bullet.transform.position = transform.position;
+    }
+    public void Fire()
+    {
+        if (bulletObjectPool.Count > 0)
+        {
+            GameObject bullet = bulletObjectPool[0];
 
-                    break;
-                }
-            }
+            bullet.SetActive(true);
 
-            
+            bulletObjectPool.Remove(bullet);
+
+            bullet.transform.position = transform.position;
         }
     }
+
+
 }

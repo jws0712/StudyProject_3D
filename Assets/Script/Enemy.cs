@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     Vector3 dir;
     public GameObject explosionFactory;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         
 
@@ -45,12 +45,21 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.name.Contains("Bullet"))
         {
             collision.gameObject.SetActive(false);
+
+            PlayerFire player = GameObject.Find("Player").GetComponent<PlayerFire>();
+
+            player.bulletObjectPool.Add(collision.gameObject);
         }
         else
         {
             Destroy(collision.gameObject);
         }
-        
-        Destroy(gameObject);
+
+        gameObject.SetActive(false);
+
+        GameObject emObject = GameObject.Find("EnemyManager");
+        EnemyManager manager = emObject.GetComponent<EnemyManager>();
+
+        manager.enemyObjectPool.Add(gameObject);
     }
 }
