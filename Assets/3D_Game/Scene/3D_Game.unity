@@ -521,7 +521,7 @@ GameObject:
   - component: {fileID: 868678044}
   - component: {fileID: 868678043}
   - component: {fileID: 868678042}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -722,7 +722,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  PlayerPos: {fileID: 628862655}
+  groundDrag: 5
+  playerHeight: 2
+  WhatIsGround:
+    serializedVersion: 2
+    m_Bits: 4096
+  PlayerPos: {fileID: 1101968854}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
