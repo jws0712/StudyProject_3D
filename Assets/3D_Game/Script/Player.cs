@@ -9,10 +9,18 @@ public class Player : MonoBehaviour
 
     public float groundDrag;
 
+    public float jumpForce;
+    public float jumpCooldown;
+    public float airMultiplier;
+    public bool readyToJump;
+
+    [Header("Movement")]
+    public KeyCode jumpKey = KeyCode.Space;
+
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask WhatIsGround;
-    bool grounded;
+    public bool grounded;
 
     public Transform PlayerPos;
 
@@ -27,6 +35,11 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+    }
+
+    private void Start()
+    {
+        readyToJump = true;
     }
 
     private void Update()
@@ -51,13 +64,26 @@ public class Player : MonoBehaviour
     {
         Hinput = Input.GetAxisRaw("Horizontal");
         Vinput = Input.GetAxisRaw("Vertical");
+
+        if (Input.GetKeyDown(jumpKey) && readyToJump && grounded)
+        {
+
+            readyToJump = false;
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
     }
 
     private void MovePlayer()
     {
         moveDir = PlayerPos.forward * Vinput + PlayerPos.right * Hinput;
 
-        rb.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
+        if(grounded)
+            rb.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
+        else if (!grounded)
+            rb.AddForce(moveDir.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
     }
 
     private void SpeedCon()
@@ -69,5 +95,17 @@ public class Player : MonoBehaviour
             Vector3 limiteVel = flaVel.normalized * moveSpeed;
             rb.velocity = new Vector3(limiteVel.x, rb.velocity.y, limiteVel.z);
         }
+    }
+
+    private void Jump()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.y);
+
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+
+    private void ResetJump()
+    {
+        readyToJump = true;
     }
 }
